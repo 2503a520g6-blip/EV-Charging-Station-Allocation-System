@@ -1,0 +1,23 @@
+services:
+  # Flask Web Service
+  - type: web
+    name: ev-charging-station-allocation
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: CORS_ALLOWED_ORIGIN
+        value: https://2503a520g6-blip.github.io
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ev-charging-db
+          property: connectionString
+
+databases:
+  # Managed Persistent PostgreSQL Database
+  - name: ev-charging-db
+    databaseName: ev_charging
+    user: ev_user
+    plan: free
